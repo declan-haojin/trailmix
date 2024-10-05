@@ -9,19 +9,21 @@ deploy_server:
   script:
     - cd server
     - npm install --global vercel
-    - vercel deploy --token=$VERCEL_TOKEN
+    - vercel deploy --prod --token=$VERCEL_TOKEN
   only:
     - master
 
-#deploy_client:
-#  stage: deploy
-#  script:
-#    - echo "Deploying client directory to Vercel..."
-#    - cd client
-#    - npm install --global vercel
-#    - vercel --token $VERCEL_TOKEN --scope $VERCEL_ORG_ID --project $VERCEL_PROJECT_ID_CLIENT --prod
-#  only:
-#    - master
+deploy_client:
+  stage: deploy
+  script:
+    - cd client
+    - echo "Original NODE_ENV... $VERCEL_PROJECT_ID"
+    - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_CLIENT
+    - echo "Updated NODE_ENV... $VERCEL_PROJECT_ID"
+    - npm install --global vercel
+    - vercel deploy --prod --token=$VERCEL_TOKEN
+  only:
+    - master
 
 
 
