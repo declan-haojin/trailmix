@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react';
 import {getTest} from "./functions/test";
 
 function App() {
-    const [data, setData] = useState("TrailMix")
+    const [data, setData] = useState("TrailMix: fetching data...")
 
     useEffect(() => {
         getTest().then(res => {

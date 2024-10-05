@@ -3,7 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config();
+require('dotenv').config({ path: '../.env' });
 
 
 // app
@@ -24,7 +24,7 @@ const testRouter = require('./routes/test');
 app.use('/', testRouter);
 
 // port
-const port = process.env.PORT || 3001;
+const port = process.env.SERVER_PORT || 3001;
 
 // listener
 const server = app.listen(port, () => console.log(`Server is running on ${port}`));
