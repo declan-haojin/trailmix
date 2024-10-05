@@ -3,7 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config({path: '../.env'});
 
 
 // app
@@ -17,7 +17,7 @@ mongoose
 
 // middleware
 app.use(morgan("dev"));
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({origin: true, credentials: true}));
 
 // routes
 const testRouter = require('./routes/test');
