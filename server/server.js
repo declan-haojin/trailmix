@@ -21,7 +21,9 @@ app.use(cors({origin: true, credentials: true}));
 
 // routes
 const testRouter = require('./routes/test');
-app.use('/', testRouter);
+const nationalParkRouter = require('./routes/nationalParkRoutes');
+app.use('/api', testRouter);
+app.use('/api/parks', nationalParkRouter);
 
 // port
 const port = process.env.SERVER_PORT || 3001;
