@@ -9,7 +9,7 @@ deploy_server:
   script:
     - echo "Deploying server directory to Vercel..."
     - cd server
-    - npm install
+    - npm install --global vercel
     - vercel --token $VERCEL_TOKEN --scope $VERCEL_ORG_ID --project $VERCEL_PROJECT_ID_SERVER --prod
   only:
     - master
@@ -19,7 +19,7 @@ deploy_client:
   script:
     - echo "Deploying client directory to Vercel..."
     - cd client
-    - npm install
+    - npm install --global vercel
     - vercel --token $VERCEL_TOKEN --scope $VERCEL_ORG_ID --project $VERCEL_PROJECT_ID_CLIENT --prod
   only:
     - master
