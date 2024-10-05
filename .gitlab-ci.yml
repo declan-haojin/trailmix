@@ -8,7 +8,7 @@ deploy_server:
   stage: deploy
   script:
     - cd server
-    - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_CLIENT
+    - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_SERVER
     - echo "SERVER_PROJECT_ID $VERCEL_PROJECT_ID"
     - npm install --global vercel
     - vercel deploy --prod --token=$VERCEL_TOKEN
@@ -30,7 +30,7 @@ preview_server:
   stage: deploy
   script:
     - cd server
-    - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_CLIENT
+    - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_SERVER
     - echo "SERVER_PROJECT_ID $VERCEL_PROJECT_ID"
     - npm install --global vercel
     - vercel deploy --token=$VERCEL_TOKEN
