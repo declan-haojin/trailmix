@@ -1,22 +1,83 @@
-default:
-  image: node:20.11.1
+stages:
+  - deploy
 
-deploy_preview:
+deploy_server:
   stage: deploy
-  except:
-    - master
   script:
-    - npm install --global vercel
-    - vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
-    - vercel build --token=$VERCEL_TOKEN
-    - vercel deploy --prebuilt  --token=$VERCEL_TOKEN
-
-deploy_production:
-  stage: deploy
+    - echo "Deploying server directory to Vercel..."
+    - cd server
+    - npm install
+    - vercel --token $VERCEL_TOKEN --scope $VERCEL_ORG_ID --project $VERCEL_PROJECT_ID_SERVER --prod
   only:
     - master
+
+deploy_client:
+  stage: deploy
   script:
-    - npm install --global vercel
-    - vercel pull --yes --environment=production --token=$VERCEL_TOKEN
-    - vercel build --prod --token=$VERCEL_TOKEN
-    - vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
+    - echo "Deploying client directory to Vercel..."
+    - cd client
+    - npm install
+    - vercel --token $VERCEL_TOKEN --scope $VERCEL_ORG_ID --project $VERCEL_PROJECT_ID_CLIENT --prod
+  only:
+    - master
+
+
+
+
+
+
+
+
+#default:
+#  image: node:20.11.1
+#
+#stages:
+#  - deploy
+#
+#deploy_server_preview:
+#  stage: deploy
+#  except:
+#    - master
+#  script:
+#    - cd server
+#    - npm install --global vercel
+#    - vercel pull --yes --environment=preview --token=$VERCEL_TOKEN --scope your-server-vercel-project
+#    - vercel build --token=$VERCEL_TOKEN
+#    - vercel deploy --prebuilt --token=$VERCEL_TOKEN
+#  variables:
+#    VERCEL_PROJECT: your-server-vercel-project
+
+#deploy_client_preview:
+#  stage: deploy
+#  except:
+#    - master
+#  script:
+#    - cd client
+#    - npm install --global vercel
+#    - vercel deploy --prebuilt --token=$VERCEL_TOKEN
+#  variables:
+#    VERCEL_PROJECT: your-client-vercel-project
+
+#deploy_server_production:
+#  stage: deploy
+#  only:
+#    - master
+#  script:
+#    - cd server
+#    - npm install --global vercel
+#    - vercel pull --yes --environment=production --token=$VERCEL_TOKEN --scope your-server-vercel-project
+#    - vercel build --prod --token=$VERCEL_TOKEN
+#    - vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
+#  variables:
+#    VERCEL_PROJECT: your-server-vercel-project
+#
+#deploy_client_production:
+#  stage: deploy
+#  only:
+#    - master
+#  script:
+#    - cd client
+#    - npm install --global vercel
+#    - vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
+#  variables:
+#    VERCEL_PROJECT: your-client-vercel-project
