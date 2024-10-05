@@ -1,9 +1,22 @@
 services:
   server:
-    build: ./server
+    build:
+      context: ./server
     ports:
-      - '3001:3001'
+      - "3001:3001"
+    volumes:
+      - ./server:/app
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - .env
+
   client:
-    build: ./client
+    build:
+      context: ./client
     ports:
-      - '3000:3000'
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+    environment:
+      - NODE_ENV=development

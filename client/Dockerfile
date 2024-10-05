@@ -7,12 +7,6 @@ WORKDIR /app
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Set npm to have longer timeouts and use cache
-RUN npm config set cache /app/.npm-cache --global
-RUN npm config set fetch-retries 10
-RUN npm config set fetch-retry-mintimeout 40000
-RUN npm config set fetch-retry-maxtimeout 220000
-
 # Install dependencies
 RUN npm install
 
