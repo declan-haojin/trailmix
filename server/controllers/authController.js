@@ -27,9 +27,14 @@ exports.googleCallback = async (req, res) => {
             {expiresIn: '30d'}
         );
 
-        // Send the token in response or set it in a cookie
-        res.json({token, message: 'Login successful'});
+        const redirectUrl =
+            process.env.VERCEL_ENV === 'production'
+                ? `https://trailmix.haojin.li?token=${token}`
+                : process.env.VERCEL_ENV === 'preview'
+                    ? `https://trailmix-client-declan-haojin-haojin.vercel.app?token=${token}`
+                    : `http://localhost:3000?token=${token}`;
 
+        res.redirect(redirectUrl);
     } catch (error) {
         res.status(500).json({error: 'Server error during authentication'});
     }

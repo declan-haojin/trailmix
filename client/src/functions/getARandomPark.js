@@ -6,7 +6,6 @@ export const getARandomPark = async () => {
                 "Content-Type": "application/json",
             }
         });
-
         return await response.json();
     } catch (err) {
     }
