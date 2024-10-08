@@ -27,21 +27,14 @@ exports.googleCallback = async (req, res) => {
             {expiresIn: '30d'}
         );
 
-        res.cookie('token', token, {
-            httpOnly: true,  // Prevent JavaScript access to the cookie
-            secure: process.env.NODE_ENV === 'production',  // Use HTTPS in production
-            maxAge: 30 * 24 * 60 * 60 * 1000  // Cookie expires in 30 days
-        });
+        const redirectUrl =
+            process.env.VERCEL_ENV === 'production'
+                ? `https://trailmix.haojin.li?token=${token}`
+                : process.env.VERCEL_ENV === 'preview'
+                    ? `https://trailmix-client-declan-haojin-haojin.vercel.app?token=${token}`
+                    : `http://localhost:3000?token=${token}`;
 
-        // Redirect to the frontend depending on the environment
-        if (process.env.VERCEL_ENV === 'production') {
-            res.redirect('https://trailmix.haojin.li');
-        } else if (process.env.VERCEL_ENV === 'preview') {
-            res.redirect('https://trailmix-client-declan-haojin-haojin.vercel.app');
-        } else {
-            res.redirect('http://localhost:3000');
-        }
-
+        res.redirect(redirectUrl);
     } catch (error) {
         res.status(500).json({error: 'Server error during authentication'});
     }

@@ -8,13 +8,18 @@ function App() {
     const [profile, setProfile] = useState({name: '', email: ''});
     const [profileLoaded, setProfileLoaded] = useState(false);
 
-    useEffect(() => {
-        getARandomPark()
-            .then((res) => {
-                setData(res[0].name + ' National Park, ' + res[0].state);
-            })
-            .catch((err) => console.log(err));
-    }, []);
+    // Function to extract the token from the URL query string
+    const extractTokenFromUrl = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        if (token) {
+            // Store the token in localStorage
+            localStorage.setItem('jwtToken', token);
+
+            // Remove the token from the URL to clean up the URL
+            window.history.replaceState(null, null, window.location.pathname);
+        }
+    };
 
     // Fetch user profile and update state
     const fetchUserProfile = async () => {
@@ -29,6 +34,18 @@ function App() {
             console.error('Error fetching user profile:', err);
         }
     };
+
+    useEffect(() => {
+        // Extract the token from the URL and clean it up
+        extractTokenFromUrl();
+
+        // Fetch the random park data
+        getARandomPark()
+            .then((res) => {
+                setData(res[0].name + ' National Park, ' + res[0].state);
+            })
+            .catch((err) => console.log(err));
+    }, []);
 
     return (
         <div className="App">
@@ -49,7 +66,7 @@ function App() {
                     <p><strong>Email:</strong> {profile.email}</p>
                 </div>
             ) : (
-                <p>No profile loaded</p>
+                <p>No user profile loaded: please sign up first</p>
             )}
         </div>
     );
