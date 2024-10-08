@@ -33,7 +33,14 @@ exports.googleCallback = async (req, res) => {
             maxAge: 30 * 24 * 60 * 60 * 1000  // Cookie expires in 30 days
         });
 
-        res.redirect('http://localhost:3000');
+        // Redirect to the frontend depending on the environment
+        if (process.env.VERCEL_ENV === 'production') {
+            res.redirect('https://trailmix.haojin.li');
+        } else if (process.env.VERCEL_ENV === 'preview') {
+            res.redirect('https://trailmix-client-declan-haojin-haojin.vercel.app');
+        } else {
+            res.redirect('http://localhost:3000');
+        }
 
     } catch (error) {
         res.status(500).json({error: 'Server error during authentication'});
