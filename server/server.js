@@ -52,3 +52,4 @@ const port = process.env.SERVER_PORT || 3001;
 
 // listener
 const server = app.listen(port, () => console.log(`Server is running on ${port}`));
+console.log(`Current VERCEL_ENV is ${process.env.VERCEL_ENV}`);
