@@ -9,7 +9,6 @@ deploy_server:
   script:
     - cd server
     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_SERVER
-    - echo "SERVER_PROJECT_ID $VERCEL_PROJECT_ID"
     - npm install --global vercel
     - vercel deploy --prod --token=$VERCEL_TOKEN
   only:
@@ -20,7 +19,6 @@ deploy_client:
   script:
     - cd client
     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_CLIENT
-    - echo "CLIENT_PROJECT_ID $VERCEL_PROJECT_ID"
     - npm install --global vercel
     - vercel deploy --prod --token=$VERCEL_TOKEN
   only:
@@ -31,19 +29,17 @@ preview_server:
   script:
     - cd server
     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_SERVER
-    - echo "SERVER_PROJECT_ID $VERCEL_PROJECT_ID"
     - npm install --global vercel
     - vercel deploy --token=$VERCEL_TOKEN
   except:
     - master
 
-#preview_client:
-#  stage: deploy
-#  script:
-#    - cd client
-#    - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_CLIENT
-#    - echo "CLIENT_PROJECT_ID $VERCEL_PROJECT_ID"
-#    - npm install --global vercel
-#    - vercel deploy --token=$VERCEL_TOKEN
-#  except:
-#    - master
+preview_client:
+  stage: deploy
+  script:
+    - cd client
+    - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_CLIENT
+    - npm install --global vercel
+    - vercel deploy --token=$VERCEL_TOKEN
+  except:
+    - master

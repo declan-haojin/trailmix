@@ -27,8 +27,13 @@ exports.googleCallback = async (req, res) => {
             {expiresIn: '30d'}
         );
 
-        // Send the token in response or set it in a cookie
-        res.json({token, message: 'Login successful'});
+        res.cookie('token', token, {
+            httpOnly: true,  // Prevent JavaScript access to the cookie
+            secure: process.env.NODE_ENV === 'production',  // Use HTTPS in production
+            maxAge: 30 * 24 * 60 * 60 * 1000  // Cookie expires in 30 days
+        });
+
+        res.redirect('http://localhost:3000');
 
     } catch (error) {
         res.status(500).json({error: 'Server error during authentication'});

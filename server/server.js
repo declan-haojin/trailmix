@@ -10,6 +10,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const jwt = require('jsonwebtoken');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const cookieParser = require("cookie-parser");
 
 // app
 const app = express();
@@ -23,6 +24,7 @@ mongoose
 // middleware
 app.use(morgan("dev"));
 app.use(cors({origin: true, credentials: true}));
+app.use(cookieParser());
 
 // Google auth
 passport.use(new GoogleStrategy({
