@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 
-// Google OAuth callback logic
 exports.googleCallback = async (req, res) => {
+    console.log(`Google callback function evoked!`);
     try {
         // Extract Google profile information
         const {id, emails, displayName} = req.user;
@@ -34,6 +34,7 @@ exports.googleCallback = async (req, res) => {
                     ? `https://trailmix-client-declan-haojin-haojin.vercel.app?token=${token}`
                     : `http://localhost:3000?token=${token}`;
 
+        console.log(`REDIRECT_URL: ${redirectUrl}`);
         res.redirect(redirectUrl);
     } catch (error) {
         res.status(500).json({error: 'Server error during authentication'});
