@@ -14,7 +14,8 @@ exports.getUserProfile = async (req, res) => {
 
         res.json({
             name: user.name,
-            email: user.email
+            email: user.email,
+            profilePic: user.profilePic
         });
     } catch (error) {
         res.status(500).json({error: 'Failed to retrieve user profile'});

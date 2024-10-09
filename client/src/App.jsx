@@ -5,7 +5,7 @@ import {getUserProfile} from './functions/getUserProfile';
 
 function App() {
     const [data, setData] = useState('TrailMix: fetching data...');
-    const [profile, setProfile] = useState({name: '', email: ''});
+    const [profile, setProfile] = useState({name: '', email: '', profilePic: ''});
     const [profileLoaded, setProfileLoaded] = useState(false);
 
     const setCookie = (name, value, days) => {
@@ -75,6 +75,7 @@ function App() {
                     <h2>User Profile</h2>
                     <p><strong>Name:</strong> {profile.name}</p>
                     <p><strong>Email:</strong> {profile.email}</p>
+                    <img src={profile.profilePic} alt="User profile picture"/>
                 </div>
             ) : (
                 <p>No user profile loaded: please sign up first</p>

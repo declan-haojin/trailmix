@@ -2,20 +2,19 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 
 exports.googleCallback = async (req, res) => {
-    console.log(`Google callback function evoked!`);
     try {
         // Extract Google profile information
-        const {id, emails, displayName} = req.user;
+        const {id, emails, displayName, photos} = req.user;
 
         // Check if the user already exists in your database
         let user = await User.findOne({googleId: id});
 
         if (!user) {
-            // If user doesn't exist, create a new one
             user = new User({
                 googleId: id,
                 email: emails[0].value,
-                name: displayName
+                name: displayName,
+                profilePic: photos[0].value
             });
             await user.save();
         }
@@ -34,7 +33,6 @@ exports.googleCallback = async (req, res) => {
                     ? `https://trailmix-client-declan-haojin-haojin.vercel.app?token=${token}`
                     : `http://localhost:3000?token=${token}`;
 
-        console.log(`REDIRECT_URL: ${redirectUrl}`);
         res.redirect(redirectUrl);
     } catch (error) {
         res.status(500).json({error: 'Server error during authentication'});
