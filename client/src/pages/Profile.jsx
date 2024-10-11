@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import {getUserProfile} from '../functions/getUserProfile';
+import {logout} from '../functions/logout';
 
 function Profile() {
     const [profile, setProfile] = useState({name: '', email: '', profilePic: ''});
@@ -31,10 +32,16 @@ function Profile() {
 
     return (
         <div>
-            <h2>User Profile</h2>
-            <p><strong>Name:</strong> {profile.name}</p>
-            <p><strong>Email:</strong> {profile.email}</p>
-            <img src={profile.profilePic} alt="User profile"/>
+            <article>
+                <h1>User Profile</h1>
+                <hr/>
+                <p><strong>Name:</strong> {profile.name}</p>
+                <p><strong>Email:</strong> {profile.email}</p>
+                <img src={profile.profilePic} alt="User profile"/>
+            </article>
+            <article>
+                <button onClick={logout}>Logout</button>
+            </article>
         </div>
     );
 }

@@ -4,7 +4,7 @@ const deleteCookie = (name) => {
 };
 
 // Logout function
-const logout = () => {
+export const logout = () => {
     deleteCookie('jwtToken'); // Delete the JWT token cookie
-    window.location.href = '/'; // Redirect to homepage after logout
+    window.location.href = '/';
 };
