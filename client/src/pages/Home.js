@@ -1,13 +1,20 @@
 import {useEffect, useState} from 'react';
-import {getARandomPark} from '../functions/api';
+import {getParks, getARandomPark} from '../functions/api';
 
 function Home() {
+    const [parks, setParks] = useState([]);
     const [data, setData] = useState('TrailMix: fetching data...');
 
     useEffect(() => {
         getARandomPark()
             .then((res) => {
                 setData(res[0].name + ' National Park, ' + res[0].state);
+            })
+            .catch((err) => console.log(err));
+        
+        getParks()
+            .then((res) => {
+                setParks(res);
             })
             .catch((err) => console.log(err));
     }, []);
@@ -42,10 +49,11 @@ function Home() {
                 ></iframe>
             </article>
 
+
             <article>
                 <h1>Complete National Park list</h1>
                 <table className="striped">
-                    <thead>
+                <thead>
                     <tr>
                         <th scope="col">Park name</th>
                         <th scope="col">Location</th>
@@ -54,6 +62,15 @@ function Home() {
                     </tr>
                     </thead>
                     <tbody>
+                    {parks.map((park) => (
+                        <tr>
+                            <th scope="row">{park.name}</th>
+                            <td>{park.state}</td>
+                            <td>{park.established}</td>
+                            <td>{park.visitors}</td>
+                        </tr>
+                    ))}
+                    </tbody>
                     <tr>
                         <th scope="row">Mercury</th>
                         <td>4,880</td>
@@ -78,7 +95,6 @@ function Home() {
                         <td>1.52</td>
                         <td>687</td>
                     </tr>
-                    </tbody>
                 </table>
             </article>
         </div>

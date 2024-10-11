@@ -13,6 +13,19 @@ export const getARandomPark = async () => {
     }
 }
 
+export const getParks = async () => {
+    try {
+        const response = await fetch("/api/parks", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+        return await response.json();
+    } catch (err) {
+    }
+}
+
 export const getUserProfile = async () => {
     try {
         // Await the axios request and return the data
