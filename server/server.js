@@ -32,8 +32,12 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: "/api/auth/google/callback"
 }, (accessToken, refreshToken, profile, done) => {
-    // Pass the profile information to the next middleware
-    return done(null, profile);
+    try {
+        profile.accessToken = accessToken;
+        return done(null, profile);
+    } catch (error) {
+        return done(error, null);
+    }
 }));
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));

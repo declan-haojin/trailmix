@@ -6,14 +6,15 @@ import {getSignUpLink} from './functions/auth';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
+import ProtectedRoute from './components/ProtectedRoute'; // Import the ProtectedRoute component
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
         extractTokenFromUrl();
-        const isAuthenticated = checkAuthentication();
-        setIsAuthenticated(isAuthenticated);
+        const authStatus = checkAuthentication();
+        setIsAuthenticated(authStatus);
     }, []);
 
     return (
@@ -25,7 +26,16 @@ function App() {
                 />
                 <Routes>
                     <Route path="/" element={<Home/>}/>
-                    {isAuthenticated && <Route path="/profile" element={<Profile/>}/>}
+
+                    {/* Use ProtectedRoute for the /profile path */}
+                    <Route
+                        path="/profile"
+                        element={
+                            <ProtectedRoute isAuthenticated={isAuthenticated}>
+                                <Profile/>
+                            </ProtectedRoute>
+                        }
+                    />
                 </Routes>
             </div>
         </Router>
