@@ -8,7 +8,6 @@ const authenticateJWT = (req, res, next) => {
         token = authHeader.split(' ')[1];  // Extract token from Authorization header
     } else if (req.cookies) {
         // If no Authorization header, check for the token in cookies
-        console.log("COOKIE_TOKEN", req.cookies);
         token = req.cookies.jwtToken;  // Extract token from cookie
     }
     console.log(token);
