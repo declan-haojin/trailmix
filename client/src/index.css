@@ -1,16 +1,44 @@
-* {
-  margin: auto
-}
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* New primary color for light color scheme (Default) */
+/* Can be forced with data-theme="light" */
+[data-theme=light],
+:root:not([data-theme=dark]) {
+    --pico-text-selection-color: rgba(98, 217, 38, 0.25); /* Adjusting for new primary color */
+    --pico-primary: rgb(98, 217, 38); /* New primary color */
+    --pico-primary-background: rgb(88, 196, 34); /* Slightly darker for background */
+    --pico-primary-underline: rgba(98, 217, 38, 0.5); /* Primary color for underline */
+    --pico-primary-hover: rgb(78, 173, 30); /* Darker primary on hover */
+    --pico-primary-hover-background: rgb(76, 142, 42); /* Main color on hover background */
+    --pico-primary-focus: rgba(98, 217, 38, 0.5); /* Primary color for focus */
+    --pico-primary-inverse: #fff; /* Dark gray text on primary background */
+    --pico-spacing: 2rem;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* Keeping Lime color for dark color scheme (Auto) */
+/* Automatically enabled if user has Dark mode enabled */
+@media only screen and (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+        --pico-text-selection-color: rgba(193, 243, 53, 0.1875); /* Adjusting for lime */
+        --pico-primary: #C1F335; /* Lime color */
+        --pico-primary-background: #A4D42C; /* Slightly darker lime for background */
+        --pico-primary-underline: rgba(193, 243, 53, 0.5); /* Lime for underline */
+        --pico-primary-hover: #99C92B; /* Darker lime on hover */
+        --pico-primary-hover-background: #A4D42C; /* Darker lime on hover background */
+        --pico-primary-focus: rgba(193, 243, 53, 0.375); /* Lime for focus */
+        --pico-primary-inverse: #333; /* White text on lime background */
+        --pico-spacing: 2rem;
+    }
+}
+
+/* Keeping Lime color for dark color scheme (Forced) */
+/* Enabled if forced with data-theme="dark" */
+[data-theme=dark] {
+    --pico-text-selection-color: rgba(193, 243, 53, 0.1875); /* Adjusting for lime */
+    --pico-primary: #C1F335; /* Lime color */
+    --pico-primary-background: #A4D42C; /* Slightly darker lime for background */
+    --pico-primary-underline: rgba(193, 243, 53, 0.5); /* Lime for underline */
+    --pico-primary-hover: #99C92B; /* Darker lime on hover */
+    --pico-primary-hover-background: #A4D42C; /* Darker lime on hover background */
+    --pico-primary-focus: rgba(193, 243, 53, 0.375); /* Lime for focus */
+    --pico-primary-inverse: #333; /* White text on lime background */
+    --pico-spacing: 2rem;
 }

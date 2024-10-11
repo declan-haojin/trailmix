@@ -1,0 +1,19 @@
+.gradient {
+    font-size: 3.5rem;
+    background: #00FF00;
+    background: linear-gradient(to left, #00FF00 0%, #00FFFF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns by default */
+    gap: 1rem; /* Space between grid items */
+}
+
+@media (max-width: 1024px) {
+    .group {
+        grid-template-columns: 1fr; /* 1 column on smaller screens */
+    }
+}
