@@ -48,19 +48,20 @@ exports.logout = async (req, res) => {
         const userId = req.user.id;
         const user = await User.findById(userId);
 
-        if (user && user.accessToken) {
-            // Revoke the access token with Google
-            await axios.get(
-                `https://accounts.google.com/o/oauth2/revoke?token=${user.accessToken}`
-            );
+        if (user) {
+            if (user.accessToken) {
+                // Revoke the access token with Google
+                await axios.get(
+                    `https://accounts.google.com/o/oauth2/revoke?token=${user.accessToken}`
+                );
 
-            // Remove the access token from the user's record
-            user.accessToken = null;
-            await user.save();
-
+                // Remove the access token from the user's record
+                user.accessToken = null;
+                await user.save();
+            }
             res.status(200).json({message: 'Successfully logged out'});
         } else {
-            res.status(400).json({error: 'User not found or already logged out'});
+            res.status(400).json({error: 'User not found'});
         }
     } catch (error) {
         console.log(error);
