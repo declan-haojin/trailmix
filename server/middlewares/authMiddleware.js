@@ -10,7 +10,6 @@ const authenticateJWT = (req, res, next) => {
         // If no Authorization header, check for the token in cookies
         token = req.cookies.jwtToken;  // Extract token from cookie
     }
-    console.log(token);
     if (!token) {
         return res.sendStatus(401); // Unauthorized, no token found
     }
