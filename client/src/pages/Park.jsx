@@ -44,6 +44,18 @@ function Park() {
                                 )}
                             </article>
                         </div>
+                        <div className="group">
+                            <article>
+                                <h2>Park Rating</h2>
+                                <h1>5/5</h1>
+                            </article>
+                            <article>
+                                <h1>Park on the map</h1>
+                                <hr></hr>
+                                <iframe src="https://snazzymaps.com/embed/482375" width="100%" height="500rem"></iframe>
+                            </article>
+
+                        </div>
                     </>
                 )
             )}
