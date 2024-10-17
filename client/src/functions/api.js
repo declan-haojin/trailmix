@@ -10,7 +10,22 @@ export const getARandomPark = async () => {
         });
         return await response.json();
     } catch (err) {
-        console.error('Error fetching user profile:', err);
+        console.error('Error fetching a random park:', err);
+        throw err;
+    }
+}
+
+export const getAllParks = async () => {
+    try {
+        const response = await fetch("/api/parks", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+        return await response.json();
+    } catch (err) {
+        console.error('Error fetching all parks:', err);
         throw err;
     }
 }

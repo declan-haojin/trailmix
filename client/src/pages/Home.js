@@ -7,7 +7,7 @@ function Home() {
     useEffect(() => {
         getARandomPark()
             .then((res) => {
-                setData(res[0].name + ' National Park, ' + res[0].state);
+                setData(res[0].name + ' National Park, ' + res[0].states);
             })
             .catch((err) => console.log(err));
     }, []);
