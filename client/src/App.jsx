@@ -27,7 +27,7 @@ function App() {
                 />
                 <Routes>
                     <Route path="/" element={<Home/>}/>
-                    <Route path="/park" element={<Park/>}/>
+                    <Route path="/parks/:parkCode" element={<Park/>}/>
 
                     {/* Use ProtectedRoute for the /profile path */}
                     <Route

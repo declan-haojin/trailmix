@@ -15,6 +15,16 @@ export const getARandomPark = async () => {
     }
 }
 
+export const getParkByCode = async (parkCode) => {
+    try {
+        const response = await fetch(`/api/parks/${parkCode}`);
+        return await response.json();
+    } catch (err) {
+        console.error('Error fetching park data:', err);
+        throw err;
+    }
+}
+
 export const getAllParks = async () => {
     try {
         const response = await fetch("/api/parks", {

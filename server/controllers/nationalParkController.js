@@ -18,6 +18,22 @@ const getWebcamsForPark = async (parkCode) => {
     }
 };
 
+exports.getParkByCode = async (req, res) => {
+    try {
+        const {parkCode} = req.params;
+
+        const park = await NationalPark.findOne({park_code: parkCode});
+
+        if (!park) {
+            return res.status(404).json({message: 'Park not found.'});
+        }
+
+        res.json(park);
+    } catch (err) {
+        res.status(500).json({message: err.message});
+    }
+};
+
 exports.getARandomPark = async (req, res) => {
     try {
         const parks = await NationalPark.aggregate([{$sample: {size: 1}}]);

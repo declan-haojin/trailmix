@@ -1,28 +1,31 @@
 import {useEffect, useState} from 'react';
-import {getARandomPark} from '../functions/api';
+import {useParams} from 'react-router-dom'; // Import useParams to access URL parameters
+import {getParkByCode} from '../functions/api'; // Updated function
 
 function Park() {
-    const [parks, setParks] = useState([]);
+    const {parkCode} = useParams(); // Get parkCode from the URL
+    const [park, setPark] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getARandomPark()
+        getParkByCode(parkCode)
             .then((res) => {
-                setParks(res);
+                setPark(res);
                 setLoading(false);
             })
             .catch((err) => console.log(err));
-    }, []);
+    }, [parkCode]);
 
     return (
         <div>
             {loading ? (
-                <p>Loading parks data...</p>
+                <p>Loading park data...</p>
             ) : (
-                <>
-                    {parks.map((park) => (
-                        <>
-                            <h1>{park.name}</h1>
+                park && (
+                    <>
+                        <h1>{park.name}</h1>
+                        <hr/>
+                        <div className="group">
                             <article>
                                 <h2>Basic Info</h2>
                                 <hr/>
@@ -40,9 +43,9 @@ function Park() {
                                     />
                                 )}
                             </article>
-                        </>
-                    ))}
-                </>
+                        </div>
+                    </>
+                )
             )}
         </div>
     );
