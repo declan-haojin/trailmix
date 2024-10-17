@@ -1,25 +1,31 @@
 const mongoose = require('mongoose');
 
-const nationalParkSchema = new mongoose.Schema({
+const NationalParkSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        unique: true
     },
-    state: {
+    park_code: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
     },
-    established: {
-        type: Number,
-        required: true
-    },
-    image_url: {
+    location: {
         type: String,
-        required: false
-    }
-}, {
-    timestamps: true
+        default: 'No location provided',
+    },
+    states: {
+        type: String,
+        required: true,
+    },
+    image: {
+        type: String,
+        default: 'No image provided',
+    },
+    description: {
+        type: String,
+        required: true,
+    },
 });
 
-module.exports = mongoose.model('national_parks', nationalParkSchema);
+module.exports = mongoose.model('tests', NationalParkSchema);
