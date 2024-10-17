@@ -23,17 +23,17 @@ function Park() {
             ) : (
                 park && (
                     <>
-                        <h1>{park.name}</h1>
+                        <h1 className="gradient">{park.name}</h1>
                         <hr/>
                         <div className="group">
                             <article>
-                                <h2>Basic Info</h2>
+                                <h1>Basic Info</h1>
                                 <hr/>
                                 <p><strong>Location:</strong> {park.states}</p>
                                 <p><strong>Description:</strong> {park.description}</p>
                             </article>
                             <article>
-                                <h2>Park Image</h2>
+                                <h1>Park Image</h1>
                                 <hr/>
                                 {park.image && (
                                     <img
@@ -46,7 +46,7 @@ function Park() {
                         </div>
                         <div className="group">
                             <article>
-                                <h2>Park Rating</h2>
+                                <h1>Park Rating</h1>
                                 <h1>5/5</h1>
                             </article>
                             <article>
