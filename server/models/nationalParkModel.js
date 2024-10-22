@@ -26,6 +26,11 @@ const NationalParkSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    averageRating: {
+        type: Number,
+        default: 0
+    },
+    comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}]
 });
 
 module.exports = mongoose.model('tests', NationalParkSchema);
