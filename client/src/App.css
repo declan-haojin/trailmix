@@ -21,8 +21,13 @@
 .logo {
     font-size: 2rem; /* Adjust the size as needed */
     font-weight: bold; /* Optional: make the text bold */
-    letter-spacing: 3px;
+    letter-spacing: 2px;
+    color: var(--pico-primary);
+}
 
+.logo:hover {
+    text-decoration: none;
+    color: var(--pico-primary);
 }
 
 /* Style for the second ul to increase the gap between its items */
