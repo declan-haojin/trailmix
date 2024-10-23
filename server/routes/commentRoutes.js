@@ -7,10 +7,11 @@ const {
     deleteComment
 } = require('../controllers/commentController');
 const authenticateJWT = require('../middlewares/authMiddleware');
+const {upload} = require("../middlewares/uploadMiddleware");
 
 // Route to create a new comment for a national park
 // Protected route: only authenticated users can create comments
-router.post('/:parkId', authenticateJWT, createComment);
+router.post('/:parkId', authenticateJWT, upload, createComment);
 
 // Route to get all comments for a specific national park
 router.get('/:parkId', getCommentsByPark);

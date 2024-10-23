@@ -1,15 +1,28 @@
 const Comment = require('../models/commentModel');
 const NationalPark = require('../models/nationalParkModel');
+const {uploadToR2} = require("../middlewares/uploadMiddleware");
 
 const createComment = async (req, res) => {
-    const {parkId, rating, comment, images} = req.body;
-    const userId = req.user._id;
+    const {parkId, rating, comment} = req.body;
+    const userId = req.user.id;
 
     try {
-        // Check if park exists
+        // Check if the park exists
         const park = await NationalPark.findById(parkId);
         if (!park) {
             return res.status(404).json({message: 'National Park not found'});
+        }
+
+        // Array to store uploaded image URLs
+        const imageUrls = [];
+
+        // Check if images are uploaded
+        if (req.files && req.files.length > 0) {
+            // Loop through each file and upload to Cloudflare R2
+            for (const file of req.files) {
+                const result = await uploadToR2(file);
+                imageUrls.push(result.Location);
+            }
         }
 
         // Create and save the comment
@@ -18,13 +31,13 @@ const createComment = async (req, res) => {
             user: userId,
             rating,
             comment,
-            images
+            images: imageUrls
         });
 
         await newComment.save();
-
         res.status(201).json(newComment);
     } catch (error) {
+        console.log(error);
         res.status(500).json({message: 'Failed to create comment', error: error.message});
     }
 };
