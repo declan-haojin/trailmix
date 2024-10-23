@@ -42,5 +42,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://host.docker.internal:3001"
+  "proxy": "http://server:3001"
 }
+

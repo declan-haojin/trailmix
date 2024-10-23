@@ -9,7 +9,7 @@ function CommentModal({isOpen, onClose, onSubmit, commentData}) {
     // Populate form fields if editing an existing comment
     useEffect(() => {
         if (commentData) {
-            setCommentText(commentData.commentText || '');
+            setCommentText(commentData.comment || '');
             setRating(commentData.rating || 5);
             setImages(commentData.images || []);
         }
@@ -24,13 +24,13 @@ function CommentModal({isOpen, onClose, onSubmit, commentData}) {
         setRating(rate);
     };
 
-    // Handle form submission
+    // Handle form submission, but delegate the actual submission to the parent component via onSubmit
     const handleSubmit = (e) => {
         e.preventDefault();
 
         // Prepare the form data
         const formData = new FormData();
-        formData.append('commentText', commentText);
+        formData.append('comment', commentText);
         formData.append('rating', rating);
 
         // Append selected images
@@ -38,7 +38,7 @@ function CommentModal({isOpen, onClose, onSubmit, commentData}) {
             formData.append('images', image);
         });
 
-        // Pass formData to the parent component
+        // Pass the formData to the parent component for submission
         onSubmit(formData);
 
         // Close modal after submitting
@@ -63,7 +63,6 @@ function CommentModal({isOpen, onClose, onSubmit, commentData}) {
                         size={60}
                         style={{marginBottom: 'var(--pico-spacing)'}}
                     />
-
 
                     <label htmlFor="comment">Comment:</label>
                     <textarea

@@ -5,13 +5,12 @@ function Navbar({isAuthenticated, getSignUpLink}) {
         <nav>
             <ul>
                 <li>
-                    <Link to="/"><h2>TrailMix</h2></Link>
+                    <Link to="/" className="logo">TrailMix</Link>
                 </li>
             </ul>
-            <ul>
-                <li>
-                    <Link className="contrast" to="/about">About</Link>
-                </li>
+            <ul className="nav-links">
+                <li><Link className="contrast" to="/parks/all">All Parks</Link></li>
+                <li><Link className="contrast" to="/about">About</Link></li>
                 {!isAuthenticated ? (
                     <>
                         <li><a className="contrast" href={getSignUpLink()}>Log In</a></li>

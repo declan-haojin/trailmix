@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Profile from './pages/Profile';
 import ProtectedRoute from './components/ProtectedRoute'; // Import the ProtectedRoute component
 import Park from './pages/Park';
+import AllParks from './pages/AllParks';
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -27,6 +28,8 @@ function App() {
                 />
                 <Routes>
                     <Route path="/" element={<Home/>}/>
+                    <Route path="/about"/>
+                    <Route path="/parks/all" element={<AllParks/>}/>
                     <Route path="/parks/:parkCode" element={<Park/>}/>
 
                     {/* Use ProtectedRoute for the /profile path */}

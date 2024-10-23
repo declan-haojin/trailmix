@@ -4,25 +4,21 @@ import {getParkByCode} from '../functions/api';
 import ParkMap from "../components/ParkMap"; // Import the ParkMap component
 import {Rating} from 'react-simple-star-rating';
 import CommentModal from "../components/CommentModal"; // Import the CommentModal component
+import axios from 'axios';  // Import axios for making API requests
 
 function Park() {
     const {parkCode} = useParams(); // Get parkCode from the URL
     const [park, setPark] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setModalOpen] = useState(false); // Modal control for adding/editing comments
-    const [userRating, setUserRating] = useState(0); // User's rating
-    const [userComment, setUserComment] = useState(''); // User's comment
     const [userReview, setUserReview] = useState(null); // Placeholder for user review data
 
     useEffect(() => {
         getParkByCode(parkCode)
             .then((res) => {
                 setPark(res);
-                // Simulate fetching the user's review and rating if it exists (you can fetch this from your backend)
-                setUserReview({
-                    rating: 4.5, // Example initial rating
-                    comment: "Beautiful park with stunning views!"
-                });
+                
+                // TODO: Retrieve the user's review
                 setLoading(false);
             })
             .catch((err) => console.log(err));
@@ -46,15 +42,40 @@ function Park() {
     const closeModal = () => setModalOpen(false);
 
     // Handle submitting a new or edited review
-    const handleSubmitReview = (formData) => {
-        const commentText = formData.get('commentText');
-        const rating = formData.get('rating');
-        // Here you would send the comment and rating to your backend (e.g., via an API)
-        setUserReview({
-            rating: rating,
-            comment: commentText
-        });
-        closeModal(); // Close modal after submitting
+    const handleSubmitReview = async (formData) => {
+        try {
+            // Make API request to submit the comment and rating
+            if (userReview) {
+                // Update existing comment (PUT request)
+                await axios.put(`/api/comments/${userReview._id}/`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+            } else {
+                // Create a new comment (POST request)
+                formData.append('parkId', park._id); // Add park ID to the form data
+                await axios.post(`/api/comments/${park._id}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+            }
+
+            // After submitting, update the user review state
+            const commentText = formData.get('comment');
+            const rating = formData.get('rating');
+
+            setUserReview({
+                rating: rating,
+                comment: commentText
+            });
+
+            // Close modal after submitting
+            closeModal();
+        } catch (error) {
+            console.error("Failed to submit review", error);
+        }
     };
 
     return (
@@ -70,6 +91,7 @@ function Park() {
                             <article>
                                 <h1>Basic Info</h1>
                                 <hr/>
+                                <p><strong>Park ID:</strong> {park._id}</p>
                                 <p><strong>Location:</strong> {park.states}</p>
                                 <p><strong>Description:</strong> {park.description}</p>
                             </article>
