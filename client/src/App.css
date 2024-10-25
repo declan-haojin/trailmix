@@ -17,3 +17,25 @@
         grid-template-columns: 1fr; /* 1 column on smaller screens */
     }
 }
+
+.logo {
+    font-size: 2rem; /* Adjust the size as needed */
+    font-weight: bold; /* Optional: make the text bold */
+    letter-spacing: 2px;
+    color: var(--pico-primary);
+}
+
+.logo:hover {
+    text-decoration: none;
+    color: var(--pico-primary);
+}
+
+/* Style for the second ul to increase the gap between its items */
+.nav-links li {
+    margin-right: 15px; /* Adjust the value as needed for larger gaps */
+}
+
+/* Optional: if you want to remove the gap after the last item */
+.nav-links li:last-child {
+    margin-right: 0;
+}

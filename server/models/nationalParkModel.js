@@ -26,6 +26,14 @@ const NationalParkSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    numRatings: {
+        type: Number,
+        default: 0
+    },
+    cumulativeRating: {
+        type: Number,
+        default: 0
+    }
 });
 
 module.exports = mongoose.model('tests', NationalParkSchema);

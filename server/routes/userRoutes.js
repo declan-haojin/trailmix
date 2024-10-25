@@ -1,6 +1,6 @@
 const express = require('express');
 const userController = require('../controllers/userController');
-const authenticateJWT = require('../middlewares/authMiddleware');  // Import the JWT middleware
+const authenticateJWT = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
