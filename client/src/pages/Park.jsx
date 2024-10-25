@@ -1,50 +1,67 @@
 import {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom'; // Import useParams to access URL parameters
-import {getParkByCode} from '../functions/api';
-import ParkMap from "../components/ParkMap"; // Import the ParkMap component
+import {useParams} from 'react-router-dom';
+import {getCommentsByPark, getParkByCode} from '../functions/api';
+import ParkMap from "../components/ParkMap";
 import {Rating} from 'react-simple-star-rating';
-import CommentModal from "../components/CommentModal"; // Import the CommentModal component
-import axios from 'axios';  // Import axios for making API requests
+import CommentModal from "../components/CommentModal";
+import axios from 'axios';
 
 function Park() {
-    const {parkCode} = useParams(); // Get parkCode from the URL
+    const {parkCode} = useParams();
     const [park, setPark] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [isModalOpen, setModalOpen] = useState(false); // Modal control for adding/editing comments
-    const [userReview, setUserReview] = useState(null); // Placeholder for user review data
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [parkReviews, setParkReviews] = useState([]);
+    const [userReview, setUserReview] = useState(null);
 
     useEffect(() => {
-        getParkByCode(parkCode)
-            .then((res) => {
-                setPark(res);
-                
-                // TODO: Retrieve the user's review
+        const fetchParkData = async () => {
+            try {
+                const parkData = await getParkByCode(parkCode);
+                setPark(parkData);
+
+                // Fetch all reviews for this park
+                const reviews = await getCommentsByPark(parkData._id);
+                setParkReviews(reviews);
+
+                // Optionally set userReview if there's a specific user's review to display separately
+                const existingUserReview = reviews.find(review => review.userId === "currentUserId"); // Replace with actual user ID logic
+                setUserReview(existingUserReview);
+
                 setLoading(false);
-            })
-            .catch((err) => console.log(err));
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchParkData();
     }, [parkCode]);
 
-    // Function to extract lat and long from the park location (assuming "lat:..., long:..." format)
     const extractCoordinates = (locationString) => {
         if (!locationString) return {lat: null, long: null};
-
         const latMatch = locationString.match(/lat:([0-9.-]+)/);
         const longMatch = locationString.match(/long:([0-9.-]+)/);
-
-        const lat = latMatch ? parseFloat(latMatch[1]) : null;
-        const long = longMatch ? parseFloat(longMatch[1]) : null;
-
-        return {lat, long};
+        return {
+            lat: latMatch ? parseFloat(latMatch[1]) : null,
+            long: longMatch ? parseFloat(longMatch[1]) : null
+        };
     };
 
-    // Open modal to allow users to add/edit their rating and comment
     const openModal = () => setModalOpen(true);
     const closeModal = () => setModalOpen(false);
 
-    // Handle submitting a new or edited review
+    // Fetch updated reviews after submitting a review
+    const fetchUpdatedReviews = async () => {
+        try {
+            const updatedReviews = await getCommentsByPark(park._id);
+            setParkReviews(updatedReviews);
+        } catch (error) {
+            console.error("Failed to fetch updated reviews", error);
+        }
+    };
+
     const handleSubmitReview = async (formData) => {
         try {
-            // Make API request to submit the comment and rating
             if (userReview) {
                 // Update existing comment (PUT request)
                 await axios.put(`/api/comments/${userReview._id}/`, formData, {
@@ -54,7 +71,7 @@ function Park() {
                 });
             } else {
                 // Create a new comment (POST request)
-                formData.append('parkId', park._id); // Add park ID to the form data
+                formData.append('parkId', park._id);
                 await axios.post(`/api/comments/${park._id}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
@@ -62,17 +79,9 @@ function Park() {
                 });
             }
 
-            // After submitting, update the user review state
-            const commentText = formData.get('comment');
-            const rating = formData.get('rating');
-
-            setUserReview({
-                rating: rating,
-                comment: commentText
-            });
-
-            // Close modal after submitting
-            closeModal();
+            // Refresh the list of reviews after submitting
+            await fetchUpdatedReviews();
+            closeModal(); // Close the modal after submission
         } catch (error) {
             console.error("Failed to submit review", error);
         }
@@ -103,21 +112,42 @@ function Park() {
                         </div>
                         <div className="group">
                             <article>
-                                <h1>Park Rating</h1>
-                                {/* Display the user's rating */}
-                                <Rating
-                                    readonly={true}
-                                    initialValue={userReview ? userReview.rating : 0}
-                                    allowFraction={true}
-                                />
+                                <h1>Average Rating</h1>
+                                {
+                                    <Rating
+                                        readonly={true}
+                                        initialValue={park.cumulativeRating / park.numRatings}
+                                        allowFraction={true}
+                                    />
+                                }
+                                <h1>All Reviews</h1>
                                 <hr/>
-                                {/* Featured review (user review or placeholder if none exist) */}
-                                <strong>Featured Review</strong>
-                                <blockquote>
-                                    {userReview
-                                        ? userReview.comment
-                                        : "No reviews yet. Be the first to leave a comment!"}
-                                </blockquote>
+                                {parkReviews.length > 0 ? (
+                                    parkReviews.map((review, index) => (
+                                        <div key={index} className="review">
+                                            <Rating
+                                                readonly={true}
+                                                initialValue={review.rating}
+                                                allowFraction={true}
+                                            />
+                                            <p>{review.comment}</p>
+                                            {review.images && review.images.length > 0 && (
+                                                <div className="review-images">
+                                                    {review.images.map((image, imgIndex) => (
+                                                        <img
+                                                            key={imgIndex}
+                                                            src={image}
+                                                            alt={`Review Image ${imgIndex + 1}`}
+                                                            style={{width: '100px', height: 'auto', margin: '5px'}}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>No reviews yet. Be the first to leave a comment!</p>
+                                )}
 
                                 {/* Button to allow users to add or edit their review */}
                                 <button onClick={openModal}>

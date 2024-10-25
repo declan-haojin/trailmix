@@ -58,8 +58,8 @@ function CommentModal({isOpen, onClose, onSubmit, commentData}) {
                     <label htmlFor="rating">Rating:</label>
                     <Rating
                         onClick={handleRating}
-                        ratingValue={rating} // Set the current rating
-                        allowFraction={true} // Allow fractional ratings
+                        ratingValue={rating}
+                        allowFraction={true}
                         size={60}
                         style={{marginBottom: 'var(--pico-spacing)'}}
                     />

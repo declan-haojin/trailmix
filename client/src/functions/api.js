@@ -25,6 +25,16 @@ export const getParkByCode = async (parkCode) => {
     }
 }
 
+export const getCommentsByPark = async (parkId) => {
+    try {
+        const response = await fetch(`/api/comments/${parkId}`);
+        return await response.json();
+    } catch (err) {
+        console.error('Error fetching comments:', err);
+        throw err;
+    }
+}
+
 export const getAllParks = async () => {
     try {
         const response = await fetch("/api/parks", {

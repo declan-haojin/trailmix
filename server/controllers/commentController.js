@@ -33,9 +33,22 @@ const createComment = async (req, res) => {
             comment,
             images: imageUrls
         });
-
         await newComment.save();
-        res.status(201).json(newComment);
+
+        // Calculate new average rating of the park
+        park.numRatings += 1;  // Increment the number of ratings
+        park.cumulativeRating += Number(rating);  // Add the new rating to the cumulativeRating
+        console.log(`Rating += ${rating}`);
+
+        // Save the updated park data
+        await park.save();
+
+        // Respond with the new comment and the park's updated data
+        res.status(201).json({
+            comment: newComment,
+            numRatings: park.numRatings,
+            averageRating: park.cumulativeRating / park.numRatings  // Calculate the average dynamically
+        });
     } catch (error) {
         console.log(error);
         res.status(500).json({message: 'Failed to create comment', error: error.message});
@@ -48,8 +61,9 @@ const getCommentsByPark = async (req, res) => {
 
     try {
         const comments = await Comment.find({park: parkId})
-            .populate('user', 'name email') // Assuming you want to populate user details
-            .populate('park', 'name'); // Optionally populate park details
+            .populate('user', 'name email profilePic')
+            .sort({createdAt: -1});
+
 
         res.status(200).json(comments);
     } catch (error) {
