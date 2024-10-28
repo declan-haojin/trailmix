@@ -36,4 +36,4 @@ const NationalParkSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('tests', NationalParkSchema);
+module.exports = mongoose.model('national_parks', NationalParkSchema);
