@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
-const authController = require('../controllers/authController');  // Import the controller
+const authController = require('../controllers/authController');
+const authenticateJWT = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 // Route to start Google OAuth
@@ -12,5 +13,7 @@ router.get(
     passport.authenticate('google', {session: false}),
     authController.googleCallback
 );
+
+router.post('/api/auth/google/logout', authenticateJWT, authController.logout);
 
 module.exports = router;

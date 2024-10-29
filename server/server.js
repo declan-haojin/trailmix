@@ -7,9 +7,9 @@ require('dotenv').config({path: '../.env'});
 // Google auth
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const jwt = require('jsonwebtoken');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const commentRoutes = require('./routes/commentRoutes');
 const cookieParser = require("cookie-parser");
 
 // app
@@ -32,8 +32,12 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: "/api/auth/google/callback"
 }, (accessToken, refreshToken, profile, done) => {
-    // Pass the profile information to the next middleware
-    return done(null, profile);
+    try {
+        profile.accessToken = accessToken;
+        return done(null, profile);
+    } catch (error) {
+        return done(error, null);
+    }
 }));
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
@@ -46,6 +50,7 @@ const testRouter = require('./routes/test');
 const nationalParkRouter = require('./routes/nationalParkRoutes');
 app.use('/api', testRouter);
 app.use('/api/parks', nationalParkRouter);
+app.use('/api/comments', commentRoutes);
 
 // port
 const port = process.env.SERVER_PORT || 3001;

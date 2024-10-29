@@ -1,14 +1,16 @@
 import {useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
 import {getParks, getARandomPark, getParksByState} from '../functions/api';
 
 function Home() {
-    const [parks, setParks] = useState([]);
-    const [data, setData] = useState('TrailMix: fetching data...');
+    const [park, setPark] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         getARandomPark()
             .then((res) => {
-                setData(res[0].name + ' National Park, ' + res[0].state);
+                setPark(res[0]); // Store the whole park object
+                setLoading(false);
             })
             .catch((err) => console.log(err));
         
@@ -36,7 +38,15 @@ function Home() {
                 <article>
                     <h1>🏞️&nbsp;&nbsp;One park a day...</h1>
                     <hr/>
-                    <h2>{data}</h2>
+                    {loading ? (
+                        <p>TrailMix: fetching data...</p>
+                    ) : (
+                        <h2>
+                            <Link to={`/parks/${park.park_code}`}>
+                                {park.name}
+                            </Link>
+                        </h2>
+                    )}
                     <p>Every day is an adventure waiting to happen! Discover a new national park each day, from the
                         towering peaks of the Rockies to the serene forests of the Pacific Northwest.</p>
                 </article>
@@ -53,8 +63,7 @@ function Home() {
             <article>
                 <h1>63 National Parks on the map</h1>
                 <hr></hr>
-                <iframe src="https://snazzymaps.com/embed/482375" width="100%" height="600px"
-                ></iframe>
+                <iframe src="https://snazzymaps.com/embed/482375" width="100%" height="600px"></iframe>
             </article>
 
             <h1>Complete National Park list</h1>

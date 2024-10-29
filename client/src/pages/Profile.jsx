@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {getUserProfile} from '../functions/getUserProfile';
+import {getUserProfile} from '../functions/api';
 import {logout} from '../functions/logout';
 
 function Profile() {

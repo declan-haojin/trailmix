@@ -1,12 +1,11 @@
 const jwt = require('jsonwebtoken');
+const axios = require('axios');
 const User = require('../models/userModel');
 
 exports.googleCallback = async (req, res) => {
     try {
-        // Extract Google profile information
-        const {id, emails, displayName, photos} = req.user;
+        const {id, emails, displayName, photos, accessToken} = req.user;
 
-        // Check if the user already exists in your database
         let user = await User.findOne({googleId: id});
 
         if (!user) {
@@ -14,8 +13,13 @@ exports.googleCallback = async (req, res) => {
                 googleId: id,
                 email: emails[0].value,
                 name: displayName,
-                profilePic: photos[0].value
+                profilePic: photos[0].value,
+                accessToken: accessToken,
             });
+            await user.save();
+        } else {
+            // Update the accessToken in the existing user's record
+            user.accessToken = accessToken;
             await user.save();
         }
 
@@ -39,22 +43,28 @@ exports.googleCallback = async (req, res) => {
     }
 };
 
-// Protected route logic
-exports.protectedRoute = (req, res) => {
-    const authHeader = req.headers.authorization;
+exports.logout = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await User.findById(userId);
 
-    if (authHeader) {
-        const token = authHeader.split(' ')[1];
+        if (user) {
+            if (user.accessToken) {
+                // Revoke the access token with Google
+                await axios.get(
+                    `https://accounts.google.com/o/oauth2/revoke?token=${user.accessToken}`
+                );
 
-        jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-            if (err) {
-                return res.sendStatus(403);  // Forbidden, invalid token
+                // Remove the access token from the user's record
+                user.accessToken = null;
+                await user.save();
             }
-
-            // Token is valid, return the user data or proceed with the action
-            res.json({message: 'You are authenticated!', user});
-        });
-    } else {
-        res.sendStatus(401);  // Unauthorized, no token provided
+            res.status(200).json({message: 'Successfully logged out'});
+        } else {
+            res.status(400).json({error: 'User not found'});
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({error: 'Failed to log out'});
     }
 };
