@@ -86,3 +86,13 @@ exports.deletePark = async (req, res) => {
         res.status(500).json({message: err.message});
     }
 };
+
+// Controller to get all national parks in a specific state
+exports.getParksByState = async (req, res) => {
+    try {
+        const parks = await NationalPark.find({state: req.params.state});
+        res.json(parks);
+    } catch (err) {
+        res.status(500).json({message: err.message});
+    }
+};

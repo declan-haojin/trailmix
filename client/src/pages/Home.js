@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {getParks, getARandomPark} from '../functions/api';
+import {getParks, getARandomPark, getParksByState} from '../functions/api';
 
 function Home() {
     const [parks, setParks] = useState([]);
@@ -18,6 +18,14 @@ function Home() {
             })
             .catch((err) => console.log(err));
     }, []);
+
+    const filterByState = () => {
+        getParksByState('Texas')
+            .then((res) => {
+                setParks(res);
+            })
+            .catch((err) => console.log(err));
+    }
 
     return (
         <div>
@@ -49,28 +57,25 @@ function Home() {
                 ></iframe>
             </article>
 
+            <h1>Complete National Park list</h1>
+            <div>
+                <button onClick={filterByState}>Filter By State</button>
+            </div>
 
-            <article>
-                <h1>Complete National Park list</h1>
-                <table className="striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Park name</th>
-                        <th scope="col">Location</th>
-                        <th scope="col">Established</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {parks.map((park) => (
-                        <tr>
-                            <th scope="row">{park.name}</th>
-                            <td>{park.state}</td>
-                            <td>{park.established}</td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
-            </article>
+            <div>
+                {parks && parks.map((park) => (
+                    <article>
+                        <b>{park.name}</b>
+                        <img src={park.image_url} alt={park.name}/>
+                        <br/>
+                        <b>state: </b>
+                        {park.state}
+                        <br/>
+                        <b>established: </b>
+                        {park.established}
+                    </article>
+                ))}
+            </div>
         </div>
     );
 }

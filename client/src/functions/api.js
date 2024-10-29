@@ -26,6 +26,19 @@ export const getParks = async () => {
     }
 }
 
+export const getParksByState = async (state) => {
+    try {
+        const response = await fetch(`/api/parks/${state}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+        return await response.json();
+    } catch (err) {
+    }
+}
+
 export const getUserProfile = async () => {
     try {
         // Await the axios request and return the data
