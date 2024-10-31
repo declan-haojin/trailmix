@@ -33,6 +33,10 @@ const NationalParkSchema = new mongoose.Schema({
     cumulativeRating: {
         type: Number,
         default: 0
+    },
+    funFact: {
+        type: String,
+        default: 'No fun fact available',
     }
 });
 
