@@ -69,3 +69,23 @@ export const logoutGoogle = async () => {
         throw err;
     }
 }
+
+export const getARandomFunFact = async () => {
+    try {
+      const response = await fetch(`/api/funfacts/random`);
+      return await response.json();
+    } catch (err) {
+      console.error('Error fetching a random fun fact:', err);
+      throw err;
+    }
+};
+
+export const getFunFactsByParkID = async (parkID) => {
+    try {
+      const response = await fetch(`/api/funfacts/${parkID}`);
+      return await response.json();
+    } catch (err) {
+      console.error('Error fetching fun facts by Park ID:', err);
+      throw err;
+    }
+};
