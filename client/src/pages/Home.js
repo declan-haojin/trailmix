@@ -1,18 +1,27 @@
 import {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {getARandomPark} from '../functions/api';
+import {getARandomFunFact} from '../functions/api';
 
 function Home() {
     const [park, setPark] = useState(null);
+    const [funFact, setFunFact] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         getARandomPark()
             .then((res) => {
                 setPark(res[0]); // Store the whole park object
-                setLoading(false);
             })
             .catch((err) => console.log(err));
+
+        getARandomFunFact()
+            .then((res) => {
+                setFunFact(res.funFact);
+            })
+            .catch((err) => console.log(err));
+
+        setLoading(false);    
     }, []);
 
     return (
@@ -40,7 +49,7 @@ function Home() {
                 <article>
                     <h1>💭&nbsp;&nbsp;Did you know...</h1>
                     <hr/>
-                    <h2>The Least-Visited National Park Saw Just 11,000 Visitors</h2>
+                    <h2>{funFact}</h2>
                     <p>The most-visited national park, the Great Smoky Mountains, welcomed more than 13 million visitors
                         in 2023.</p>
                 </article>
