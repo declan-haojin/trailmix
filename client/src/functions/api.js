@@ -63,9 +63,13 @@ export const getParks = async () => {
     }
 }
 
-export const getParksByState = async (state) => {
+export const getParksByCriteria = async (state, sortBy = '') => {
     try {
-        const response = await fetch(`/api/parks/${state}`, {
+        const query = new URLSearchParams();
+        if (state) query.append('state', state);
+        if (sortBy) query.append('sortBy', sortBy);
+
+        const response = await fetch(`/api/parks?${query.toString()}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -73,8 +77,9 @@ export const getParksByState = async (state) => {
         });
         return await response.json();
     } catch (err) {
+        console.error('Failed to fetch parks by criteria:', err);
     }
-}
+};
 
 export const getUserProfile = async () => {
     try {

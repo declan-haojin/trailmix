@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import './AllParks.css'
-import {getAllParks} from "../functions/api";
+import {getAllParks, getParksByCriteria} from "../functions/api";
+import ParkFilterSort from "../components/ParkFilterSort";
 import {Link} from 'react-router-dom';
 
 function AllParks() {
@@ -14,9 +15,20 @@ function AllParks() {
         fetchParks();
     }, []);
 
+    const selectByCriteria = (stateAbbrevation, sortBy) => {
+        getParksByCriteria(stateAbbrevation, sortBy)
+            .then((res) => {
+                setParks(res);
+            })
+            .catch((err) => console.log(err));
+        console.log('filtering by state', parks);
+    }
+
     return (
         <section className="container">
             <h1 className="gradient">Top Destinations</h1>
+            <hr/>
+            <ParkFilterSort selectByCriteria={selectByCriteria} />
             <hr/>
             <div className="grid">
                 {parks.length > 0 ? (

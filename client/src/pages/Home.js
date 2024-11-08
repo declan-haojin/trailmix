@@ -1,10 +1,9 @@
 import {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
-import {getParks, getARandomPark, getParksByState} from '../functions/api';
+import {getARandomPark} from '../functions/api';
 
 function Home() {
     const [park, setPark] = useState(null);
-    const [parks, setParks] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -14,21 +13,7 @@ function Home() {
                 setLoading(false);
             })
             .catch((err) => console.log(err));
-        
-        getParks()
-            .then((res) => {
-                setParks(res);
-            })
-            .catch((err) => console.log(err));
     }, []);
-
-    const filterByState = () => {
-        getParksByState('Texas')
-            .then((res) => {
-                setParks(res);
-            })
-            .catch((err) => console.log(err));
-    }
 
     return (
         <div>
@@ -66,26 +51,6 @@ function Home() {
                 <hr></hr>
                 <iframe src="https://snazzymaps.com/embed/482375" width="100%" height="600px"></iframe>
             </article>
-
-            <h1>Complete National Park list</h1>
-            <div>
-                <button onClick={filterByState}>Filter By State</button>
-            </div>
-
-            <div>
-                {parks && parks.map((park) => (
-                    <article>
-                        <b>{park.name}</b>
-                        <img src={park.image_url} alt={park.name}/>
-                        <br/>
-                        <b>state: </b>
-                        {park.state}
-                        <br/>
-                        <b>established: </b>
-                        {park.established}
-                    </article>
-                ))}
-            </div>
         </div>
     );
 }

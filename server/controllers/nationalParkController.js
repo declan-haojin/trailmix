@@ -43,12 +43,28 @@ exports.getARandomPark = async (req, res) => {
     }
 };
 
+// Controller to get all national parks with optional query parameters
 exports.getAllParks = async (req, res) => {
     try {
-        const parks = await NationalPark.find();
+        const filters = {};
+        const { state, sortBy } = req.query;
+
+        if (state) {
+            filters.states = new RegExp(`\\b${state}\\b`, 'i');
+        }
+
+        let query = NationalPark.find(filters);
+
+        if (sortBy) {
+            const sortCriteria = {};
+            sortCriteria[sortBy] = -1; // 1 for ascending, -1 for descending
+            query = query.sort(sortCriteria);
+        }
+
+        const parks = await query.exec();
         res.json(parks);
     } catch (err) {
-        res.status(500).json({message: err.message});
+        res.status(500).json({ message: err.message });
     }
 };
 
@@ -97,16 +113,6 @@ exports.deletePark = async (req, res) => {
             return res.status(404).json({message: 'Park not found'});
         }
         res.json({message: 'Park deleted'});
-    } catch (err) {
-        res.status(500).json({message: err.message});
-    }
-};
-
-// Controller to get all national parks in a specific state
-exports.getParksByState = async (req, res) => {
-    try {
-        const parks = await NationalPark.find({state: req.params.state});
-        res.json(parks);
     } catch (err) {
         res.status(500).json({message: err.message});
     }
