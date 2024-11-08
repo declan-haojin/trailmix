@@ -63,13 +63,15 @@ exports.getFunFactsByParkId = async (req, res) => {
         res.json({ funFact: park.funFact });
     } catch (error) {
         console.error('Error fetching fun fact:', error);
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
 exports.getARandomFunFact = async (req, res) => {
     try {
         const randomPark = await NationalPark.aggregate([{ $sample: { size: 1 } }]);
+
+        console.log('Random Park Data:', randomPark);
   
         if (!randomPark || randomPark.length === 0) {
             return res.status(404).json({ message: 'No parks found' });
@@ -78,6 +80,6 @@ exports.getARandomFunFact = async (req, res) => {
         res.json({ funFact: randomPark[0].funFact });
     } catch (error) {
         console.error('Error fetching random fun fact:', error);
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: error.message });
     }
 };

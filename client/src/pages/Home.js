@@ -11,17 +11,26 @@ function Home() {
     useEffect(() => {
         getARandomPark()
             .then((res) => {
-                setPark(res[0]); // Store the whole park object
+                if (res && res.length > 0) {
+                    setPark(res[0]);
+                    setLoading(false);
+                } else {
+                    console.log("No park data available.");
+                }
             })
             .catch((err) => console.log(err));
 
         getARandomFunFact()
             .then((res) => {
-                setFunFact(res.funFact);
+                if (res && res.funFact) {
+                    setFunFact(res.funFact);
+                } else {
+                    console.log("No fun fact available.");
+                }
             })
             .catch((err) => console.log(err));
 
-        setLoading(false);    
+            
     }, []);
 
     return (
@@ -49,7 +58,7 @@ function Home() {
                 <article>
                     <h1>💭&nbsp;&nbsp;Did you know...</h1>
                     <hr/>
-                    <h2>{funFact}</h2>
+                    {funFact ? <h2>{funFact}</h2> : <p>No fun fact available</p>}
                     <p>The most-visited national park, the Great Smoky Mountains, welcomed more than 13 million visitors
                         in 2023.</p>
                 </article>
