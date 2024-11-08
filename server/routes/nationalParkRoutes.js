@@ -7,10 +7,10 @@ router.get('/', nationalParkController.getAllParks);
 
 router.get('/random', nationalParkController.getARandomPark);
 
-router.get('/:parkCode', nationalParkController.getParkByCode);
-
 router.get('/funfacts/:parkID', nationalParkController.getFunFactsByParkId);
 
 router.get('/funfacts/random', nationalParkController.getARandomFunFact);
+
+router.get('/:parkCode', nationalParkController.getParkByCode);
 
 module.exports = router;
