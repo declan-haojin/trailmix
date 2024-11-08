@@ -49,7 +49,8 @@ function Home() {
             <article>
                 <h1>63 National Parks on the map</h1>
                 <hr></hr>
-                <iframe src="https://snazzymaps.com/embed/482375" width="100%" height="600px"></iframe>
+                <iframe title="National Park Map" src="https://snazzymaps.com/embed/482375" width="100%"
+                        height="600px"></iframe>
             </article>
 
             <article>
