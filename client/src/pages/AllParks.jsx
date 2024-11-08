@@ -6,6 +6,7 @@ import {Link} from 'react-router-dom';
 
 function AllParks() {
     const [parks, setParks] = useState([]);
+    const [noParks, setNoParks] = useState(false);
 
     useEffect(() => {
         const fetchParks = async () => {
@@ -19,6 +20,12 @@ function AllParks() {
         getParksByCriteria(stateAbbrevation, sortBy)
             .then((res) => {
                 setParks(res);
+                if (res.length === 0) {
+                    setNoParks(true);
+                }
+                else {
+                    setNoParks(false);
+                }
             })
             .catch((err) => console.log(err));
         console.log('filtering by state', parks);
@@ -31,7 +38,7 @@ function AllParks() {
             <ParkFilterSort selectByCriteria={selectByCriteria} />
             <hr/>
             <div className="grid">
-                {parks.length > 0 ? (
+                {!noParks ? (parks.length > 0 ? (
                     parks.map((park) => (
                         <Link to={`/parks/${park.park_code}`} key={park.id}>
                             <article
@@ -41,13 +48,16 @@ function AllParks() {
                             >
                                 <div className="card-content">
                                     <h3>{park.name.replace(/ National Park$/, '')}</h3>
-                                    <p>Explore now</p>
+                                    <p>{`Rating : ${park.numRatings > 0 ? (park.cumulativeRating / park.numRatings).toFixed(2) : 'No ratings yet'}`}</p>
+                                    <p>{`Reviews : ${park.numRatings ? park.numRatings : 0}`}</p>
                                 </div>
                             </article>
                         </Link>
                     ))
                 ) : (
                     <p>Loading parks...</p>
+                )) : (
+                    <p>No parks found</p>
                 )}
             </div>
         </section>

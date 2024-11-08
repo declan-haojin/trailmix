@@ -57,8 +57,8 @@ const ParkFilterSort = ({ selectByCriteria }) => {
                     <option value="">
                         Select Sorting Criteria
                     </option>
-                    <option value="cumulativeRating">Cumulative Rating</option>
-                    <option value="numRatings">Number of Ratings</option>
+                    <option value="averageRating">Rating</option>
+                    <option value="numRatings">Number of Reviews</option>
                 </select>
             </div>
         </div>

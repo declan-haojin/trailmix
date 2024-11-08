@@ -53,15 +53,26 @@ exports.getAllParks = async (req, res) => {
             filters.states = new RegExp(`\\b${state}\\b`, 'i');
         }
 
-        let query = NationalPark.find(filters);
+        const pipeline = [{ $match: filters }];
 
-        if (sortBy) {
-            const sortCriteria = {};
-            sortCriteria[sortBy] = -1; // 1 for ascending, -1 for descending
-            query = query.sort(sortCriteria);
+        if (sortBy === 'averageRating') {
+            pipeline.push({
+                $addFields: {
+                    averageRating: {
+                        $cond: {
+                            if: { $eq: ["$numRatings", 0] },
+                            then: 0,
+                            else: { $divide: ["$cumulativeRating", "$numRatings"] }
+                        }
+                    }
+                }
+            });
+            pipeline.push({ $sort: { averageRating: -1 } });
+        } else if (sortBy) {
+            pipeline.push({ $sort: { [sortBy]: -1 } });
         }
 
-        const parks = await query.exec();
+        const parks = await NationalPark.aggregate(pipeline).exec();
         res.json(parks);
     } catch (err) {
         res.status(500).json({ message: err.message });
