@@ -4,6 +4,7 @@ import {getParks, getARandomPark, getParksByState} from '../functions/api';
 
 function Home() {
     const [park, setPark] = useState(null);
+    const [parks, setParks] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
