@@ -1,5 +1,6 @@
 const NationalPark = require('../models/nationalParkModel');
 const axios = require('axios');
+const mongoose = require('mongoose');
 
 const getWebcamsForPark = async (parkCode) => {
     try {
@@ -56,7 +57,7 @@ exports.getFunFactsByParkId = async (req, res) => {
     try {
         const { parkId } = req.params;
         const park = await NationalPark.findById(parkId);
-  
+
         if (!park) {
             return res.status(404).json({ message: 'Park not found.' });
         }
@@ -72,11 +73,11 @@ exports.getARandomFunFact = async (req, res) => {
         const randomPark = await NationalPark.aggregate([{ $sample: { size: 1 } }]);
 
         console.log('Random Park Data:', randomPark);
-  
+
         if (!randomPark || randomPark.length === 0) {
             return res.status(404).json({ message: 'No parks found' });
         }
-  
+
         res.json({ funFact: randomPark[0].funFact });
     } catch (error) {
         console.error('Error fetching random fun fact:', error);

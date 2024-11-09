@@ -7,20 +7,24 @@ function Home() {
     const [park, setPark] = useState(null);
     const [funFact, setFunFact] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         getARandomPark()
             .then((res) => {
                 if (res && res.length > 0) {
                     setPark(res[0]);
-                    setLoading(false);
                 } else {
                     console.log("No park data available.");
+                    setError("No park data available.");
                 }
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                console.log(err);
+                setError("Failed to fetch park data.");
+            });
 
-        getARandomFunFact()
+            getARandomFunFact()
             .then((res) => {
                 if (res && res.funFact) {
                     setFunFact(res.funFact);
@@ -28,9 +32,11 @@ function Home() {
                     console.log("No fun fact available.");
                 }
             })
-            .catch((err) => console.log(err));
-
-            
+            .catch((err) => {
+                console.log(err);
+                setError("Failed to fetch fun fact.");
+            })
+            .finally(() => setLoading(false));
     }, []);
 
     return (
@@ -58,9 +64,17 @@ function Home() {
                 <article>
                     <h1>💭&nbsp;&nbsp;Did you know...</h1>
                     <hr/>
-                    {funFact ? <h2>{funFact}</h2> : <p>No fun fact available</p>}
-                    <p>The most-visited national park, the Great Smoky Mountains, welcomed more than 13 million visitors
-                        in 2023.</p>
+                    {loading ? (
+                        <p>Loading fun fact...</p>
+                    ) : (
+                        funFact ? (
+                            <div>
+                                <p>{funFact}</p>
+                            </div>
+                        ) : (
+                            <p>No fun fact available.</p>
+                        )
+                    )}
                 </article>
             </div>
 
