@@ -50,12 +50,16 @@ function Home() {
                     <hr/>
                     {loading ? (
                         <p>TrailMix: fetching data...</p>
-                    ) : (
+                    ) : error ? (
+                        <p>{error}</p>
+                    ) : park ? (
                         <h2>
                             <Link to={`/parks/${park.park_code}`}>
                                 {park.name}
                             </Link>
                         </h2>
+                    ) : (
+                        <p>No park data available.</p>
                     )}
                     <p>Every day is an adventure waiting to happen! Discover a new national park each day, from the
                         towering peaks of the Rockies to the serene forests of the Pacific Northwest.</p>
