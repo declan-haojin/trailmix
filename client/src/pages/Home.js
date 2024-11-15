@@ -66,7 +66,7 @@ function Home() {
                 </article>
 
                 <article>
-                    <h1>💭&nbsp;&nbsp;Did you know...</h1>
+                    <h1>💭&nbsp;&nbsp;Did you know this...</h1>
                     <hr/>
                     {loading ? (
                         <p>Loading fun fact...</p>
