@@ -137,7 +137,7 @@ function Park() {
                                                         <img
                                                             key={imgIndex}
                                                             src={image}
-                                                            alt={`Review Image ${imgIndex + 1}`}
+                                                            alt={`Review ${imgIndex + 1}`}
                                                             style={{width: '100px', height: 'auto', margin: '5px'}}
                                                         />
                                                     ))}
