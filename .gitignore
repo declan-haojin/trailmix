@@ -64,5 +64,5 @@ typings/
 .next
 .vercel
 
-../.DS_Store
+# macos
 .DS_Store

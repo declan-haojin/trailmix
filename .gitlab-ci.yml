@@ -19,7 +19,7 @@ deploy_server:
     - npm install --global vercel
     - vercel deploy --prod --token=$VERCEL_TOKEN
   only:
-    - master
+    - main
 
 deploy_client:
   stage: deploy
@@ -30,7 +30,7 @@ deploy_client:
     - npm install --global vercel
     - vercel deploy --prod --token=$VERCEL_TOKEN
   only:
-    - master
+    - main
 
 #preview_server:
 # stage: deploy
