@@ -43,10 +43,87 @@ exports.getARandomPark = async (req, res) => {
     }
 };
 
+// Controller to get all national parks with optional query parameters
 exports.getAllParks = async (req, res) => {
     try {
-        const parks = await NationalPark.find();
+        const filters = {};
+        const { state, sortBy } = req.query;
+
+        if (state) {
+            filters.states = new RegExp(`\\b${state}\\b`, 'i');
+        }
+
+        const pipeline = [{ $match: filters }];
+
+        if (sortBy === 'averageRating') {
+            pipeline.push({
+                $addFields: {
+                    averageRating: {
+                        $cond: {
+                            if: { $eq: ["$numRatings", 0] },
+                            then: 0,
+                            else: { $divide: ["$cumulativeRating", "$numRatings"] }
+                        }
+                    }
+                }
+            });
+            pipeline.push({ $sort: { averageRating: -1 } });
+        } else if (sortBy) {
+            pipeline.push({ $sort: { [sortBy]: -1 } });
+        }
+
+        const parks = await NationalPark.aggregate(pipeline).exec();
         res.json(parks);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Controller to get a specific national park by ID
+exports.getParkById = async (req, res) => {
+    try {
+        const park = await NationalPark.findById(req.params.id);
+        if (!park) {
+            return res.status(404).json({message: 'Park not found'});
+        }
+        res.json(park);
+    } catch (err) {
+        res.status(500).json({message: err.message});
+    }
+};
+
+// Controller to update a national park by ID
+exports.updatePark = async (req, res) => {
+    try {
+        const updatedPark = await NationalPark.findByIdAndUpdate(
+            req.params.id,
+            {
+                name: req.body.name,
+                location: req.body.location,
+                established: req.body.established,
+                size: req.body.size,
+                description: req.body.description,
+                attractions: req.body.attractions
+            },
+            {new: true}
+        );
+        if (!updatedPark) {
+            return res.status(404).json({message: 'Park not found'});
+        }
+        res.json(updatedPark);
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+};
+
+// Controller to delete a national park by ID
+exports.deletePark = async (req, res) => {
+    try {
+        const park = await NationalPark.findByIdAndDelete(req.params.id);
+        if (!park) {
+            return res.status(404).json({message: 'Park not found'});
+        }
+        res.json({message: 'Park deleted'});
     } catch (err) {
         res.status(500).json({message: err.message});
     }
