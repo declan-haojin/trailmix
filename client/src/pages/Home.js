@@ -5,7 +5,7 @@ import {getARandomFunFact} from '../functions/api';
 
 function Home() {
     const [park, setPark] = useState(null);
-    const [funFact, setFunFact] = useState(null);
+    const [funFactData, setFunFactData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -24,10 +24,13 @@ function Home() {
                 setError("Failed to fetch park data.");
             });
 
-            getARandomFunFact()
+        getARandomFunFact()
             .then((res) => {
-                if (res && res.funFact) {
-                    setFunFact(res.funFact);
+                if (res && res.funFact && res.park) {
+                    setFunFactData({
+                        park: res.park,
+                        funFact: res.funFact
+                    });
                 } else {
                     console.log("No fun fact available.");
                 }
@@ -71,9 +74,14 @@ function Home() {
                     {loading ? (
                         <p>Loading fun fact...</p>
                     ) : (
-                        funFact ? (
+                        funFactData ? (
                             <div>
-                                <p>{funFact}</p>
+                                <h2>
+                                    <Link to={`/parks/${funFactData.park.park_code}`}>
+                                        {funFactData.park.name}
+                                    </Link>
+                                </h2>
+                                <p>{funFactData.funFact}</p>
                             </div>
                         ) : (
                             <p>No fun fact available.</p>
