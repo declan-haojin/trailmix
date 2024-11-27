@@ -84,7 +84,7 @@ function Home() {
                                 <p>{funFactData.funFact}</p>
                             </div>
                         ) : (
-                            <p>No fun fact available.</p>
+                            <p>No fun fact available</p>
                         )
                     )}
                 </article>
