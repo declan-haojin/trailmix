@@ -50,6 +50,37 @@ export const getAllParks = async () => {
     }
 }
 
+export const getParks = async () => {
+    try {
+        const response = await fetch("/api/parks", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+        return await response.json();
+    } catch (err) {
+    }
+}
+
+export const getParksByCriteria = async (state, sortBy = '') => {
+    try {
+        const query = new URLSearchParams();
+        if (state) query.append('state', state);
+        if (sortBy) query.append('sortBy', sortBy);
+
+        const response = await fetch(`/api/parks?${query.toString()}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+        return await response.json();
+    } catch (err) {
+        console.error('Failed to fetch parks by criteria:', err);
+    }
+};
+
 export const getUserProfile = async () => {
     try {
         const response = await axios.get('/api/user/profile', {withCredentials: true});

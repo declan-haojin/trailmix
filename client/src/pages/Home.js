@@ -93,48 +93,7 @@ function Home() {
             <article>
                 <h1>63 National Parks on the map</h1>
                 <hr></hr>
-                <iframe title="National Park Map" src="https://snazzymaps.com/embed/482375" width="100%"
-                        height="600px"></iframe>
-            </article>
-
-            <article>
-                <h1>Complete National Park list</h1>
-                <table className="striped">
-                    <thead>
-                    <tr>
-                        <th scope="col">Park name</th>
-                        <th scope="col">Location</th>
-                        <th scope="col">Established</th>
-                        <th scope="col">Annual visitors</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row">Mercury</th>
-                        <td>4,880</td>
-                        <td>0.39</td>
-                        <td>88</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Venus</th>
-                        <td>12,104</td>
-                        <td>0.72</td>
-                        <td>225</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Earth</th>
-                        <td>12,742</td>
-                        <td>1.00</td>
-                        <td>365</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Mars</th>
-                        <td>6,779</td>
-                        <td>1.52</td>
-                        <td>687</td>
-                    </tr>
-                    </tbody>
-                </table>
+                <iframe title="National Park Map" src="https://snazzymaps.com/embed/482375" width="100%" height="600px"></iframe>
             </article>
         </div>
     );

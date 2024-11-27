@@ -1,36 +1,37 @@
-import React, {useEffect, useRef} from 'react';
+import React, { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 
+// Mapbox access token
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
-function ParkMap({lat, long}) {
-    const mapContainerRef = useRef(null);
-    const mapRef = useRef(null); // Store the map instance
+// Initial coordinates for the entire globe
+const initialCoordinates = {
+    lng: 0,   // Longitude (centered globally)
+    lat: 0,   // Latitude (centered globally)
+    zoom: 1,  // Global view
+};
 
-    // Initial coordinates for the entire globe
-    const initialCoordinates = {
-        lng: 0,   // Longitude (centered globally)
-        lat: 0,   // Latitude (centered globally)
-        zoom: 1,  // Global view
-    };
+function ParkMap({ lat, long }) {
+    const mapContainerRef = useRef(null); // Ref for the map container
+    const mapRef = useRef(null); // Ref to store the map instance
 
     useEffect(() => {
         // Initialize the map with a global view and enable globe mode
         mapRef.current = new mapboxgl.Map({
-            container: mapContainerRef.current,
+            container: mapContainerRef.current, // Map container reference
             style: 'mapbox://styles/mapbox/satellite-streets-v12', // Map style
-            center: [initialCoordinates.lng, initialCoordinates.lat],
-            zoom: initialCoordinates.zoom, // Start at global zoom
-            projection: 'globe', // Enable the 3D globe view
-            attributionControl: false,
+            center: [initialCoordinates.lng, initialCoordinates.lat], // Initial center
+            zoom: initialCoordinates.zoom, // Initial zoom
+            projection: 'globe', // Enable 3D globe projection
+            attributionControl: false, // Disable attribution control
         });
 
-        // Ensure globe view renders properly
+        // Add fog for the 3D globe effect
         mapRef.current.on('style.load', () => {
-            mapRef.current.setFog({}); // Set fog for 3D globe effect
+            mapRef.current.setFog({});
         });
 
-        // Automatically fly to the specific latitude and longitude passed as props
+        // Automatically fly to the latitude and longitude passed as props
         mapRef.current.on('load', () => {
             mapRef.current.flyTo({
                 center: [long, lat], // Use lat and long passed as props
@@ -40,7 +41,7 @@ function ParkMap({lat, long}) {
                 bearing: 0,          // Keep the map flat (no rotation)
                 pitch: 60,           // Tilt the map for a 3D effect
                 easing: (t) => t,    // Easing function
-                essential: true      // This animation is essential for accessibility
+                essential: true,     // Mark animation as essential
             });
         });
 
@@ -48,13 +49,18 @@ function ParkMap({lat, long}) {
             // Clean up the map instance when the component unmounts
             mapRef.current.remove();
         };
-    }, [lat, long]); // Re-run the effect if lat or long changes
+    }, [lat, long]); // Re-run the effect when lat or long changes
 
     return (
         <div>
             <div
                 ref={mapContainerRef}
-                style={{width: '100%', height: '500px', borderRadius: '10px', marginTop: '20px'}}
+                style={{
+                    width: '100%',
+                    height: '500px',
+                    borderRadius: '10px',
+                    marginTop: '20px',
+                }}
             />
         </div>
     );
