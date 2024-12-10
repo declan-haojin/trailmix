@@ -1,18 +1,45 @@
 import {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {getARandomPark} from '../functions/api';
+import {getARandomFunFact} from '../functions/api';
 
 function Home() {
     const [park, setPark] = useState(null);
+    const [funFactData, setFunFactData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         getARandomPark()
             .then((res) => {
-                setPark(res[0]); // Store the whole park object
-                setLoading(false);
+                if (res && res.length > 0) {
+                    setPark(res[0]);
+                } else {
+                    console.log("No park data available.");
+                    setError("No park data available.");
+                }
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                console.log(err);
+                setError("Failed to fetch park data.");
+            });
+
+        getARandomFunFact()
+            .then((res) => {
+                if (res && res.funFact && res.park) {
+                    setFunFactData({
+                        park: res.park,
+                        funFact: res.funFact
+                    });
+                } else {
+                    console.log("No fun fact available.");
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                setError("Failed to fetch fun fact.");
+            })
+            .finally(() => setLoading(false));
     }, []);
 
     return (
@@ -26,12 +53,16 @@ function Home() {
                     <hr/>
                     {loading ? (
                         <p>TrailMix: fetching data...</p>
-                    ) : (
+                    ) : error ? (
+                        <p>{error}</p>
+                    ) : park ? (
                         <h2>
                             <Link to={`/parks/${park.park_code}`}>
                                 {park.name}
                             </Link>
                         </h2>
+                    ) : (
+                        <p>No park data available.</p>
                     )}
                     <p>Every day is an adventure waiting to happen! Discover a new national park each day, from the
                         towering peaks of the Rockies to the serene forests of the Pacific Northwest.</p>
@@ -40,9 +71,22 @@ function Home() {
                 <article>
                     <h1>💭&nbsp;&nbsp;Did you know...</h1>
                     <hr/>
-                    <h2>The Least-Visited National Park Saw Just 11,000 Visitors</h2>
-                    <p>The most-visited national park, the Great Smoky Mountains, welcomed more than 13 million visitors
-                        in 2023.</p>
+                    {loading ? (
+                        <p>Loading fun fact...</p>
+                    ) : (
+                        funFactData ? (
+                            <div>
+                                <h2>
+                                    <Link to={`/parks/${funFactData.park.park_code}`}>
+                                        {funFactData.park.name}
+                                    </Link>
+                                </h2>
+                                <p>{funFactData.funFact}</p>
+                            </div>
+                        ) : (
+                            <p>No fun fact available.</p>
+                        )
+                    )}
                 </article>
             </div>
 
