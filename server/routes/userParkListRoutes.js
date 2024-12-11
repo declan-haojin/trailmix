@@ -10,9 +10,9 @@ router.post('/add', authenticateJWT, userParkListController.addUserPark);
 router.get('/', authenticateJWT, userParkListController.getUserParks);
 
 // Route to remove a park from the user's list
-router.delete('/remove', authenticateJWT, userParkListController.removeUserPark);
+router.delete('/remove/:parkId', authenticateJWT, userParkListController.removeUserPark);
 
 // Route to check if a park is in the user's list
-router.post('/exists', authenticateJWT, userParkListController.isParkInUserList);
+router.get('/exists/:parkId', authenticateJWT, userParkListController.isParkInUserList);
 
 module.exports = router;

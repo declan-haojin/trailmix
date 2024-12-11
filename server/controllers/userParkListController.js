@@ -48,10 +48,11 @@ exports.getUserParks = async (req, res) => {
 
 // Remove a park from the user's list
 exports.removeUserPark = async (req, res) => {
-    const { user_id, park_id } = req.body;
+    const { parkId } = req.params;
+    const userId = req.user.id;
 
     try {
-        const deletedEntry = await UserParkList.findOneAndDelete({ user_id, park_id });
+        const deletedEntry = await UserParkList.findOneAndDelete({ park: parkId, user: userId });
         if (deletedEntry) {
             res.status(200).json({ message: 'Park removed from user list' });
         } else {
@@ -64,10 +65,11 @@ exports.removeUserPark = async (req, res) => {
 
 // Check if a park is already in the user's list
 exports.isParkInUserList = async (req, res) => {
-    const { user_id, park_id } = req.body;
+    const { parkId } = req.params;
+    const userId = req.user.id;
 
     try {
-        const exists = await UserParkList.exists({ user_id, park_id });
+        const exists = await UserParkList.exists({ park: parkId, user: userId });
         res.status(200).json({ exists });
     } catch (error) {
         res.status(500).json({ error: 'Failed to check park', details: error.message });
