@@ -16,6 +16,8 @@ const cookieParser = require("cookie-parser");
 // app
 const app = express();
 
+app.use(express.json());
+
 // mongodb
 mongoose
     .connect(process.env.MONGO_URI, {})
@@ -51,8 +53,9 @@ const testRouter = require('./routes/test');
 const nationalParkRouter = require('./routes/nationalParkRoutes');
 app.use('/api', testRouter);
 app.use('/api/parks', nationalParkRouter);
-app.use('/api/comments', commentRoutes);
 app.use('/api/lists', userParkListRoutes)
+app.use('/api/comments', commentRoutes);
+
 
 // port
 const port = process.env.SERVER_PORT || 3001;
