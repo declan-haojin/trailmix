@@ -10,10 +10,13 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const commentRoutes = require('./routes/commentRoutes');
+const userParkListRoutes = require('./routes/userParkListRoutes');
 const cookieParser = require("cookie-parser");
 
 // app
 const app = express();
+
+app.use(express.json());
 
 // mongodb
 mongoose
@@ -50,7 +53,9 @@ const testRouter = require('./routes/test');
 const nationalParkRouter = require('./routes/nationalParkRoutes');
 app.use('/api', testRouter);
 app.use('/api/parks', nationalParkRouter);
+app.use('/api/lists', userParkListRoutes)
 app.use('/api/comments', commentRoutes);
+
 
 // port
 const port = process.env.SERVER_PORT || 3001;

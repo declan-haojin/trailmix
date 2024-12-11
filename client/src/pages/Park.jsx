@@ -5,6 +5,7 @@ import ParkMap from "../components/ParkMap";
 import {Rating} from 'react-simple-star-rating';
 import CommentModal from "../components/CommentModal";
 import axios from 'axios';
+import AddParkToUserListButton from "../components/addParkToUserListButton";
 
 function Park() {
     const {parkCode} = useParams();
@@ -96,6 +97,7 @@ function Park() {
                     <>
                         <h1 className="gradient">{park.name}</h1>
                         <hr/>
+                        <AddParkToUserListButton parkId={park._id} />
                         <div className="group">
                             <article>
                                 <h1>Basic Info</h1>

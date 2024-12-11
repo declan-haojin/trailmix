@@ -1,23 +1,4 @@
 const NationalPark = require('../models/nationalParkModel');
-const axios = require('axios');
-const mongoose = require('mongoose');
-
-const getWebcamsForPark = async (parkCode) => {
-    try {
-        const webcamResponse = await axios.get(`https://developer.nps.gov/api/v1/webcams`, {
-            params: {
-                api_key: process.env.NPS_API_KEY,
-                parkCode: parkCode
-            }
-        });
-        const webcams = webcamResponse.data.data;
-
-        return webcams.length > 0 ? webcams : [];
-    } catch (error) {
-        console.error('Error fetching webcam data:', error);
-        return [];
-    }
-};
 
 exports.getParkByCode = async (req, res) => {
     try {
@@ -148,8 +129,6 @@ exports.getFunFactsByParkId = async (req, res) => {
 exports.getARandomFunFact = async (req, res) => {
     try {
         const randomPark = await NationalPark.aggregate([{ $sample: { size: 1 } }]);
-
-        console.log('Random Park Data:', randomPark);
 
         if (!randomPark || randomPark.length === 0) {
             return res.status(404).json({ message: 'No parks found' });
