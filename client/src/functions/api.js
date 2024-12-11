@@ -120,3 +120,13 @@ export const getFunFactsByParkID = async (parkID) => {
       throw err;
     }
 };
+
+export const getUserParkList = async () => {
+    try {
+        const response = await axios.get('/api/lists', {withCredentials: true});
+        return response.data;
+    } catch (err) {
+        console.error('Error fetching user park list:', err);
+        throw err;
+    }
+}

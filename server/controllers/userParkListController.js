@@ -1,4 +1,5 @@
 const UserParkList = require('../models/userParkListModel');
+const NationalPark = require('../models/nationalParkModel');
 
 // Add a park to the user's list
 exports.addUserPark = async (req, res) => {
@@ -25,12 +26,22 @@ exports.addUserPark = async (req, res) => {
 
 // Get all parks liked by a user
 exports.getUserParks = async (req, res) => {
-    const { user_id } = req.params;
+    const userId = req.user.id;
 
     try {
-        const userParks = await UserParkList.find({ user_id }).populate('park_id');
-        res.status(200).json(userParks);
+        // Find user's park list
+        const userParkList = await UserParkList.find({ user: userId });
+
+        // Extract park IDs from the user's park list
+        const parkIds = userParkList.map(entry => entry.park);
+
+        // Retrieve park details using the extracted park IDs
+        const parks = await NationalPark.find({ _id: { $in: parkIds } });
+
+        // Respond with the park details
+        res.status(200).json(parks);
     } catch (error) {
+        console.error('Error fetching user parks:', error);
         res.status(500).json({ error: 'Failed to fetch parks', details: error.message });
     }
 };

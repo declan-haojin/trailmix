@@ -10,7 +10,7 @@ function Navbar({isAuthenticated, getSignUpLink}) {
             </ul>
             <ul className="nav-links">
                 <li><Link className="contrast" to="/parks/all">All Parks</Link></li>
-                <li><Link className="contrast" to="/about">About</Link></li>
+                <li><Link className="contrast" to="/myparks">My Parks</Link></li>
                 {!isAuthenticated ? (
                     <>
                         <li><a className="contrast" href={getSignUpLink()}>Log In</a></li>

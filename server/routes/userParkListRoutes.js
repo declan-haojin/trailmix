@@ -7,7 +7,7 @@ const authenticateJWT = require("../middlewares/authMiddleware");
 router.post('/add', authenticateJWT, userParkListController.addUserPark);
 
 // Route to get all parks liked by a specific user
-router.get('/:user', authenticateJWT, userParkListController.getUserParks);
+router.get('/', authenticateJWT, userParkListController.getUserParks);
 
 // Route to remove a park from the user's list
 router.delete('/remove', authenticateJWT, userParkListController.removeUserPark);
