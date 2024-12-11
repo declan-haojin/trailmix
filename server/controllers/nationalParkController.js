@@ -55,6 +55,7 @@ exports.getAllParks = async (req, res) => {
         }
 
         const parks = await NationalPark.aggregate(pipeline).exec();
+        
         res.json(parks);
     } catch (err) {
         res.status(500).json({ message: err.message });
