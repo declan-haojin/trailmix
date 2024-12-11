@@ -28,7 +28,7 @@ function ParkListButton({ parkId }) {
             setIsParkInList(true); // Switch to "Remove" button
         } catch (error) {
             console.error('Error adding park:', error);
-            alert('Failed to add park to the list.');
+            alert('Failed to add park to the list. You may need to login first.');
         }
     };
 
