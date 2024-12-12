@@ -1,6 +1,6 @@
 const request = require('supertest');
 const express = require('express');
-const nationalParkRoutes = require('./nationalParkRoutes');
+const nationalParkRoutes = require('../routes/nationalParkRoutes');
 const nationalParkController = require('../controllers/nationalParkController');
 
 const app = express();

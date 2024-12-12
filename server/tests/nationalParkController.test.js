@@ -2,7 +2,7 @@ const request = require('supertest');
 const express = require('express');
 const mongoose = require('mongoose');
 const NationalPark = require('../models/nationalParkModel');
-const nationalParkController = require('./nationalParkController');
+const nationalParkController = require('../controllers/nationalParkController');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 
 const app = express();

@@ -3,7 +3,8 @@ const NationalPark = require('../models/nationalParkModel');
 const {uploadToR2} = require("../middlewares/uploadMiddleware");
 
 const createComment = async (req, res) => {
-    const {parkId, rating, comment} = req.body;
+    const { rating, comment } = req.body; // Extract from body
+    const { parkId } = req.params; // Extract from URL parameters
     const userId = req.user.id;
 
     try {
